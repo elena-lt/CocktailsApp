@@ -3,7 +3,7 @@ package com.example.cocktailssapp.ui.main;
 import android.util.Log;
 
 import com.example.cocktailssapp.repositories.CocktailsRepository;
-import com.example.cocktailssapp.data.remote.responses.CoctailsApiResponse;
+import com.example.cocktailssapp.data.remote.responses.CocktailsApiResponse;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -17,7 +17,6 @@ public class MainPresenter implements MainContract.Presenter {
     CocktailsRepository repository;
 
     public MainPresenter(MainContract.View view, CocktailsRepository repository) {
-        Log.d("AppDebug", "MainPresenter: instantiated");
         this.view = view;
         this.repository = repository;
     }
@@ -27,15 +26,15 @@ public class MainPresenter implements MainContract.Presenter {
         repository.loadData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CoctailsApiResponse>() {
+                .subscribe(new Observer<CocktailsApiResponse>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull CoctailsApiResponse coctailsApiResponse) {
-
+                    public void onNext(@NonNull CocktailsApiResponse coctailsApiResponse) {
+                        view.displayData(coctailsApiResponse.getCoctails());
                     }
 
                     @Override

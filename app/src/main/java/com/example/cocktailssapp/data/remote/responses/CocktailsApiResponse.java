@@ -5,12 +5,12 @@ import com.squareup.moshi.Json;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoctailsApiResponse {
+public class CocktailsApiResponse {
 
     @Json(name = "drinks")
     private List<Coctail> coctails;
 
-    public CoctailsApiResponse(List<Coctail> coctails) {
+    public CocktailsApiResponse(List<Coctail> coctails) {
         this.coctails = coctails;
     }
 

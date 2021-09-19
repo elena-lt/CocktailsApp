@@ -2,8 +2,9 @@ package com.example.cocktailssapp.data.remote.repositories;
 
 import com.example.cocktailssapp.data.remote.apiService.CoctailsApiService;
 import com.example.cocktailssapp.data.remote.responses.Coctail;
-import com.example.cocktailssapp.data.remote.responses.CoctailsApiResponse;
+import com.example.cocktailssapp.data.remote.responses.CocktailsApiResponse;
 import com.example.cocktailssapp.repositories.CocktailsRepository;
+import com.example.cocktailssapp.utils.RxTestSchedulerRule;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,13 +29,14 @@ import io.reactivex.rxjava3.observers.TestObserver;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-@RunWith(
-        MockitoJUnitRunner.class
-)
+@RunWith(MockitoJUnitRunner.class)
 public class CoctailsRepositoryTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
+
+    @Rule
+    public RxTestSchedulerRule testSchedulerRule = new RxTestSchedulerRule();
 
     @Mock
     CoctailsApiService service;
@@ -54,35 +56,20 @@ CocktailsRepository repository;
         MockitoAnnotations.openMocks(this);
         repository = Mockito.mock(CocktailsRepository.class);
 
-        RxJavaPlugins.setIoSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Throwable {
-                return Schedulers.trampoline();
-            }
-        });
-
-        RxAndroidPlugins.setMainThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
-            @Override
-            public Scheduler apply(Scheduler scheduler) throws Throwable {
-                return Schedulers.trampoline();
-            }
-        });
     }
 
     @After
     public void teardown(){
-        RxJavaPlugins.reset();
-        RxAndroidPlugins.reset();
     }
 
     @Test
     public void loadData() {
-        CoctailsApiResponse response = new CoctailsApiResponse(list);
+        CocktailsApiResponse response = new CocktailsApiResponse(list);
 
         Mockito.when(repository.loadData()).thenReturn(
                 Observable.just(response));
 
-        TestObserver<CoctailsApiResponse> testObserver = repository.loadData().test();
+        TestObserver<CocktailsApiResponse> testObserver = repository.loadData().test();
 
         testObserver.assertValue(response);
 

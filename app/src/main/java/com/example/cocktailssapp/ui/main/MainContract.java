@@ -1,5 +1,9 @@
 package com.example.cocktailssapp.ui.main;
 
+import com.example.cocktailssapp.data.remote.responses.Coctail;
+
+import java.util.List;
+
 public interface MainContract {
 
     interface Presenter {
@@ -7,6 +11,6 @@ public interface MainContract {
     }
 
     interface View {
-        void displayData();
+        void displayData(List<Coctail> list);
     }
 }
