@@ -55,4 +55,29 @@ public class CocktailsDaoTest {
 
     }
 
+    @Test
+    public void testConflictingInsertReplaceCocktails(){
+        CocktailEntity cocktail1 = new CocktailEntity(1, "cocktail1", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        CocktailEntity cocktail2 = new CocktailEntity(2, "cocktail2", "", "", "", "", "", "", "", "", "", "", "", "", "");
+
+        List<CocktailEntity> list1 = new ArrayList<>();
+        list1.add(cocktail1);
+        list1.add(cocktail2);
+        dao.insertAll(list1);
+
+        CocktailEntity cocktail3 = new CocktailEntity(3, "cocktail1", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        CocktailEntity cocktail4 = new CocktailEntity(2, "cocktail2", "", "", "", "", "", "", "", "", "", "", "", "", "");
+
+        List<CocktailEntity> list2 = new ArrayList<>();
+        list2.add(cocktail1);
+        list2.add(cocktail2);
+        dao.insertAll(list2);
+
+        ArrayList<CocktailEntity> expectedList = new ArrayList<>();
+        expectedList.add(cocktail1); expectedList.add(cocktail4); expectedList.add(cocktail3);
+
+        List<CocktailEntity> allCocktails = dao.getCocktails();
+        Truth.assertThat(expectedList.equals(allCocktails));
+    }
+
 }
