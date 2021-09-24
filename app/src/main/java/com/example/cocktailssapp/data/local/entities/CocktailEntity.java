@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 
 import com.squareup.moshi.Json;
 
-@Entity
+@Entity (tableName = "tb_cocktails")
 public class CocktailEntity {
 
     @PrimaryKey(autoGenerate = false)

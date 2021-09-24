@@ -1,5 +1,6 @@
 package com.example.cocktailssapp.di.data.remote;
 
+import com.example.cocktailssapp.BuildConfig;
 import com.example.cocktailssapp.data.remote.apiService.CoctailsApiService;
 import com.example.cocktailssapp.utils.Const;
 import com.squareup.moshi.Moshi;
@@ -42,7 +43,8 @@ public class NetworkModule {
         builder.addInterceptor(chain -> {
             Request request = chain.request().newBuilder()
                     .addHeader("x-rapidapi-host", "the-cocktail-db.p.rapidapi.com")
-                    .addHeader("x-rapidapi-key", "1149dbf400msh6d8702696eded64p113dd9jsnfaab9c5cad66").build();
+                    .addHeader("x-rapidapi-key", BuildConfig.API_KEY)
+                    .build();
             return chain.proceed(request);
         });
 
