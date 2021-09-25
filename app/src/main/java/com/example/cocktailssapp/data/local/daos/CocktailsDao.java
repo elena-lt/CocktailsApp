@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Observable;
+
 @Dao
 public interface CocktailsDao {
 
@@ -24,4 +26,7 @@ public interface CocktailsDao {
 
     @Query("SELECT * FROM tb_cocktails")
     List<CocktailEntity> getCocktails();
+
+    @Query("SELECT * FROM tb_cocktails")
+    Observable<List<CocktailEntity>> getCocktailsObservable();
 }

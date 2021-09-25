@@ -2,6 +2,8 @@ package com.example.cocktailssapp.di.main;
 
 import android.util.Log;
 
+import com.example.cocktailssapp.data.local.daos.CocktailsDao;
+import com.example.cocktailssapp.data.mappers.CocktailMapper;
 import com.example.cocktailssapp.data.remote.apiService.CoctailsApiService;
 import com.example.cocktailssapp.repositories.CocktailsRepository;
 import com.example.cocktailssapp.ui.main.MainContract;
@@ -13,14 +15,12 @@ import dagger.Provides;
 public class MainModule {
 
     @Provides
-    CocktailsRepository provideCoctailsRepository(CoctailsApiService apiService){
-        Log.d("AppDebug", "provideCoctailsRepository: repo instantiated ");
-        return new CocktailsRepository(apiService);
+    CocktailsRepository provideCoctailsRepository(CoctailsApiService apiService, CocktailsDao cocktailsDao, CocktailMapper mapper){
+        return new CocktailsRepository(apiService, cocktailsDao, mapper);
     }
 
     @Provides
     MainPresenter provideMainPresenter(MainContract.View view, CocktailsRepository repository){
-        Log.d("AppDebug", "provideMainPresenter instantiated");
         return new MainPresenter(view, repository);
     }
 }

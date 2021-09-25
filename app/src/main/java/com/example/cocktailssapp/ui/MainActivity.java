@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     private void getCoctails() {
-        presenter.loadData();
+//        presenter.loadData();
+        presenter.fetchData();
     }
 
     @Override
