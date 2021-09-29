@@ -64,12 +64,16 @@ public class CoctailsRepositoryTest {
     CocktailMapper mapper;
 
     ArrayList<Coctail> list = new ArrayList<>();
+    List<CocktailEntity> localData = new ArrayList<>();
 
     @Before
     public void setup() {
 
         list.add(new Coctail(1, "test"));
         list.add(new Coctail(2, "anotherTest"));
+
+        localData.add(new CocktailEntity(1, "cocktail1", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+        localData.add(new CocktailEntity(2, "cocktail2", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
         mapper = new CocktailMapper();
 
@@ -101,22 +105,20 @@ public class CoctailsRepositoryTest {
     public void testFetchData_networkAvailable_receiveDataFromNetworkRetrieveFromDb() {
         CocktailsApiResponse response = new CocktailsApiResponse(list);
 
-        setupStubbing(list, null);
+        setupStubbing(list, localData);
 
         repository.fetchData();
 
         Mockito.verify(cocktailsDao).getCocktailsObservable();
-        Mockito.verify(cocktailsDao, Mockito.atMostOnce()).insertAll(response.getCoctails().stream().map(coctail -> mapper.toCocktailEntity(coctail)).collect(Collectors.toList()));
+        Mockito.verify(cocktailsDao, Mockito.atMostOnce()).insertAll(
+                response.getCoctails().stream().map(coctail ->
+                        mapper.toCocktailEntity(coctail)).collect(Collectors.toList()));
 
     }
 
     private void setupStubbing(@Nullable List<Coctail> dataFromNetwork, @Nullable List<CocktailEntity> dataFromDb) {
-        CocktailEntity cocktail1 = new CocktailEntity(1, "cocktail1", "", "", "", "", "", "", "", "", "", "", "", "", "");
-        CocktailEntity cocktail2 = new CocktailEntity(2, "cocktail2", "", "", "", "", "", "", "", "", "", "", "", "", "");
 
-        List<CocktailEntity> list1 = new ArrayList<>();
-
-        Mockito.when(cocktailsDao.getCocktailsObservable()).thenReturn(Observable.just(list1));
+        Mockito.when(cocktailsDao.getCocktailsObservable()).thenReturn(Observable.just(dataFromDb));
         Mockito.when(service.getALlCoctails()).thenReturn(Observable.just(Response.success(new CocktailsApiResponse(dataFromNetwork))));
         Mockito.when(apiResponse.body()).thenReturn(new CocktailsApiResponse(dataFromNetwork));
 
