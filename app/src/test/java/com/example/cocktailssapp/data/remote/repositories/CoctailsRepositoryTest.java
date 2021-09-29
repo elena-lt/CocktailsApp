@@ -1,5 +1,7 @@
 package com.example.cocktailssapp.data.remote.repositories;
 
+import android.accounts.NetworkErrorException;
+
 import androidx.annotation.Nullable;
 
 import com.example.cocktailssapp.data.local.daos.CocktailsDao;
@@ -17,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.internal.matchers.ThrowableMessageMatcher;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,6 +29,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,13 +100,20 @@ public class CoctailsRepositoryTest {
     public void loadData() {
         CocktailsApiResponse response = new CocktailsApiResponse(list);
 
-        Mockito.when(repository.loadData()).thenReturn(
-                Observable.just(response));
-
+        Mockito.when(service.getCoctails()).thenReturn(Observable.just(response));
         TestObserver<CocktailsApiResponse> testObserver = repository.loadData().test();
 
         testObserver.assertValue(response);
 
+    }
+
+    @Test
+    public void loadData_throwError() {
+        Mockito.when(service.getCoctails()).thenReturn(Observable.error(NetworkErrorException::new));
+        TestObserver<CocktailsApiResponse> testObserver = repository.loadData().test();
+
+        testObserver.assertError(NetworkErrorException.class);
+        testObserver.assertNoValues();
     }
 
     @Test
