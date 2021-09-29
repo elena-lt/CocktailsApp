@@ -116,6 +116,13 @@ public class CoctailsRepositoryTest {
 
     }
 
+    @Test
+    public void testFetchData_noNetwork_receiveDataFromLocalDb(){
+        setupStubbing(null, localData);
+        repository.fetchData();
+        Mockito.verify(cocktailsDao).getCocktailsObservable();
+    }
+
     private void setupStubbing(@Nullable List<Coctail> dataFromNetwork, @Nullable List<CocktailEntity> dataFromDb) {
 
         Mockito.when(cocktailsDao.getCocktailsObservable()).thenReturn(Observable.just(dataFromDb));

@@ -18,12 +18,13 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
 
     public NetworkBoundResource(boolean shouldFetch) {
         this.shouldFetch = shouldFetch;
+        this.isNetworkAvailable = isNetworkAvailable;
         init();
     }
 
     void init() {
         Observable<Resource<ResultType>> source;
-        if (shouldFetch) {
+        if (shouldFetch && isNetworkAvailable) {
             source = fetchData()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
