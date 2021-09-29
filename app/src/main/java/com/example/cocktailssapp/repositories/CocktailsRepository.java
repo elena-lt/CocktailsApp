@@ -47,11 +47,14 @@ public class CocktailsRepository {
     }
 
     public Observable<Resource<List<CocktailEntity>>> fetchData() {
-        return new NetworkBoundResource<CocktailsApiResponse, List<CocktailEntity>>(true, networkState.isNetworkAvailable()) {
+        return new NetworkBoundResource<CocktailsApiResponse, List<CocktailEntity>>(
+                true, networkState.isNetworkAvailable()) {
 
             @Override
             Observable<List<CocktailEntity>> loadFromCache() {
-                return cocktailsDao.getCocktailsObservable().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+                return cocktailsDao.getCocktailsObservable()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
             }
 
             @Override
@@ -65,7 +68,8 @@ public class CocktailsRepository {
             @Override
             protected void saveDataToDb(CocktailsApiResponse data) {
                 if (data.getCoctails().size() > 1) {
-                    List<CocktailEntity> list = data.getCoctails().stream().map(coctail -> mapper.toCocktailEntity(coctail)).collect(Collectors.toList());
+                    List<CocktailEntity> list = data.getCoctails().stream().map(coctail ->
+                            mapper.toCocktailEntity(coctail)).collect(Collectors.toList());
                     Scheduler.Worker worker = Schedulers.io().createWorker();
                     worker.schedule(() -> cocktailsDao.insertAll(list));
                 }

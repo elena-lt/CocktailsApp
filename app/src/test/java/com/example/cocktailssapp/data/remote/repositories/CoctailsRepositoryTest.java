@@ -109,7 +109,7 @@ public class CoctailsRepositoryTest {
     public void testFetchData_networkAvailable_receiveDataFromNetworkRetrieveFromDb() {
         CocktailsApiResponse response = new CocktailsApiResponse(list);
 
-        setupStubbing(list, localData);
+        setupStubbing(true, list, localData);
 
         repository.fetchData();
 
@@ -121,14 +121,15 @@ public class CoctailsRepositoryTest {
     }
 
     @Test
-    public void testFetchData_noNetwork_receiveDataFromLocalDb(){
-        setupStubbing(null, localData);
+    public void testFetchData_noNetwork_receiveDataFromLocalDb() {
+        setupStubbing(false, null, localData);
         repository.fetchData();
-        Mockito.verify(cocktailsDao).getCocktailsObservable();
+        Mockito.verify(cocktailsDao, Mockito.atLeastOnce()).getCocktailsObservable();
     }
 
-    private void setupStubbing(@Nullable List<Coctail> dataFromNetwork, @Nullable List<CocktailEntity> dataFromDb) {
+    private void setupStubbing(boolean isNetworkAvailable, @Nullable List<Coctail> dataFromNetwork, @Nullable List<CocktailEntity> dataFromDb) {
 
+        Mockito.when(networkState.isNetworkAvailable()).thenReturn(isNetworkAvailable);
         Mockito.when(cocktailsDao.getCocktailsObservable()).thenReturn(Observable.just(dataFromDb));
         Mockito.when(service.getALlCoctails()).thenReturn(Observable.just(Response.success(new CocktailsApiResponse(dataFromNetwork))));
         Mockito.when(apiResponse.body()).thenReturn(new CocktailsApiResponse(dataFromNetwork));
