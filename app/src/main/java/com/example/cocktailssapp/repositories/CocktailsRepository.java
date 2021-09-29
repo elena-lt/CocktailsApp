@@ -1,5 +1,7 @@
 package com.example.cocktailssapp.repositories;
 
+import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
@@ -10,6 +12,7 @@ import com.example.cocktailssapp.data.local.entities.CocktailEntity;
 import com.example.cocktailssapp.data.mappers.CocktailMapper;
 import com.example.cocktailssapp.data.remote.apiService.CoctailsApiService;
 import com.example.cocktailssapp.data.remote.responses.CocktailsApiResponse;
+import com.example.cocktailssapp.utils.NetworkState;
 import com.example.cocktailssapp.utils.Resource;
 
 import java.util.List;
@@ -27,12 +30,14 @@ public class CocktailsRepository {
     CoctailsApiService apiService;
     CocktailsDao cocktailsDao;
     CocktailMapper mapper;
+    NetworkState networkState;
 
     @Inject
-    public CocktailsRepository(CoctailsApiService apiService, CocktailsDao cocktailsDao, CocktailMapper mapper) {
+    public CocktailsRepository(CoctailsApiService apiService, CocktailsDao cocktailsDao, CocktailMapper mapper, NetworkState networkState) {
         this.apiService = apiService;
         this.cocktailsDao = cocktailsDao;
         this.mapper = mapper;
+        this.networkState = networkState;
     }
 
     public Observable<CocktailsApiResponse> loadData() {
@@ -42,7 +47,7 @@ public class CocktailsRepository {
     }
 
     public Observable<Resource<List<CocktailEntity>>> fetchData() {
-        return new NetworkBoundResource<CocktailsApiResponse, List<CocktailEntity>>(true) {
+        return new NetworkBoundResource<CocktailsApiResponse, List<CocktailEntity>>(true, networkState.isNetworkAvailable()) {
 
             @Override
             Observable<List<CocktailEntity>> loadFromCache() {

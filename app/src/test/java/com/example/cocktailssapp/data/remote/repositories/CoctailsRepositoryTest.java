@@ -9,6 +9,7 @@ import com.example.cocktailssapp.data.remote.apiService.CoctailsApiService;
 import com.example.cocktailssapp.data.remote.responses.Coctail;
 import com.example.cocktailssapp.data.remote.responses.CocktailsApiResponse;
 import com.example.cocktailssapp.repositories.CocktailsRepository;
+import com.example.cocktailssapp.utils.NetworkState;
 import com.example.cocktailssapp.utils.Resource;
 import com.example.cocktailssapp.utils.RxTestSchedulerRule;
 
@@ -57,6 +58,9 @@ public class CoctailsRepositoryTest {
     @Mock
     Response<CocktailsApiResponse> apiResponse;
 
+    @Mock
+    NetworkState networkState;
+
     //    InjectMocks used to inject @Mock objects into class
     @InjectMocks
     CocktailsRepository repository;
@@ -79,7 +83,7 @@ public class CoctailsRepositoryTest {
 
         MockitoAnnotations.openMocks(this);
 
-        repository = new CocktailsRepository(service, cocktailsDao, mapper);
+        repository = new CocktailsRepository(service, cocktailsDao, mapper, networkState);
 //        repository = Mockito.mock(CocktailsRepository.class);
 
     }

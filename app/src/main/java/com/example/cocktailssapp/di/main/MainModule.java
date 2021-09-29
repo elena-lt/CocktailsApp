@@ -8,6 +8,8 @@ import com.example.cocktailssapp.data.remote.apiService.CoctailsApiService;
 import com.example.cocktailssapp.repositories.CocktailsRepository;
 import com.example.cocktailssapp.ui.main.MainContract;
 import com.example.cocktailssapp.ui.main.MainPresenter;
+import com.example.cocktailssapp.utils.NetworkState;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -15,12 +17,16 @@ import dagger.Provides;
 public class MainModule {
 
     @Provides
-    CocktailsRepository provideCoctailsRepository(CoctailsApiService apiService, CocktailsDao cocktailsDao, CocktailMapper mapper){
-        return new CocktailsRepository(apiService, cocktailsDao, mapper);
+    CocktailsRepository provideCoctailsRepository(
+            CoctailsApiService apiService,
+            CocktailsDao cocktailsDao,
+            CocktailMapper mapper,
+            NetworkState networkState) {
+        return new CocktailsRepository(apiService, cocktailsDao, mapper, networkState);
     }
 
     @Provides
-    MainPresenter provideMainPresenter(MainContract.View view, CocktailsRepository repository){
+    MainPresenter provideMainPresenter(MainContract.View view, CocktailsRepository repository) {
         return new MainPresenter(view, repository);
     }
 }

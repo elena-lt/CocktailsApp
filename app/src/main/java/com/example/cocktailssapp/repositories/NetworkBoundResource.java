@@ -2,6 +2,7 @@ package com.example.cocktailssapp.repositories;
 
 import android.util.Log;
 
+import com.example.cocktailssapp.utils.NetworkState;
 import com.example.cocktailssapp.utils.Resource;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -16,7 +17,7 @@ abstract class NetworkBoundResource<RequestType, ResultType> {
     private boolean isNetworkAvailable;
     private Observable<Resource<ResultType>> result;
 
-    public NetworkBoundResource(boolean shouldFetch) {
+    public NetworkBoundResource(boolean shouldFetch, boolean isNetworkAvailable) {
         this.shouldFetch = shouldFetch;
         this.isNetworkAvailable = isNetworkAvailable;
         init();
