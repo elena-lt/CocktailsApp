@@ -42,7 +42,7 @@ public class CocktailsRepository {
     }
 
     public Observable<Resource<List<CocktailEntity>>> fetchData() {
-        return new NetworkBoundResource<CocktailsApiResponse, List<CocktailEntity>>(true, true) {
+        return new NetworkBoundResource<CocktailsApiResponse, List<CocktailEntity>>(true) {
 
             @Override
             Observable<List<CocktailEntity>> loadFromCache() {

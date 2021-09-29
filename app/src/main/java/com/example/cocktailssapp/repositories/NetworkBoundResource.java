@@ -12,14 +12,12 @@ import retrofit2.Response;
 
 abstract class NetworkBoundResource<RequestType, ResultType> {
 
-    private boolean shouldLoadFromCache;
     private boolean shouldFetch;
     private boolean isNetworkAvailable;
     private Observable<Resource<ResultType>> result;
 
-    public NetworkBoundResource(boolean shouldFetch, boolean shouldLoadFromCache) {
+    public NetworkBoundResource(boolean shouldFetch) {
         this.shouldFetch = shouldFetch;
-        this.shouldLoadFromCache = shouldLoadFromCache;
         init();
     }
 
